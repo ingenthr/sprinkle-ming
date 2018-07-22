@@ -99,7 +99,7 @@ void loop() {
 
             client.println("<body><h1>Ingenthron Home Controller</h1>");
 
-            client.println("Current state– ");
+            client.println("Current state- ");
             client.print("grass: 0x"); client.print(digitalRead(D7), HEX);
             client.print(" bubblers: 0x"); client.print(digitalRead(D7), HEX);
             client.print(" drip: 0x"); client.print(digitalRead(D7), HEX);
