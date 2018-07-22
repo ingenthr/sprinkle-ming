@@ -51,6 +51,16 @@ void setup() {
   
 }
 
+int digitalReadOutputPin(uint8_t pin)
+{
+ uint8_t bit = digitalPinToBitMask(pin);
+ uint8_t port = digitalPinToPort(pin);
+ if (port == NOT_A_PIN)
+   return LOW;
+
+ return (*portOutputRegister(port) & bit) ? HIGH : LOW;
+}
+
 
 void loop() {
 
@@ -76,20 +86,20 @@ void loop() {
             client.println();
 
             // turns the GPIOs on and off
-            if (req_header.indexOf("POST /valve/grass") >= 0) {
+            if (req_header.indexOf("POST /valves/grass") >= 0) {
               Serial.println("Turning grass on…");
               digitalWrite(D7, LOW);
-            } else if (req_header.indexOf("POST /valve/bubbler") >= 0) {
+            } else if (req_header.indexOf("POST /valves/bubbler") >= 0) {
               Serial.println("Turning bubbler on…");
               digitalWrite(D6, LOW);
-            } else if (req_header.indexOf("POST /valve/drip") >= 0) {
+            } else if (req_header.indexOf("POST /valves/drip") >= 0) {
               Serial.println("Turning drip on…");
               digitalWrite(D5, LOW);
-            } else if (req_header.indexOf("POST /valve") >= 0) {  // TODO, check for off/on
+            } else if (req_header.indexOf("POST /valves") >= 0) {  // TODO, check for off/on
               Serial.println("Turning all valves off…");
-              for (uint8_t i=D5; i<=D7; i++) {
-                digitalWrite(i, HIGH);
-              }
+              digitalWrite(D5, HIGH);
+              digitalWrite(D6, HIGH);
+              digitalWrite(D7, HIGH);
             }
 
             // Display the HTML web page
@@ -101,8 +111,9 @@ void loop() {
 
             client.println("Current state- ");
             client.print("grass: 0x"); client.print(digitalRead(D7), HEX);
-            client.print(" bubblers: 0x"); client.print(digitalRead(D7), HEX);
-            client.print(" drip: 0x"); client.print(digitalRead(D7), HEX);
+            client.print(", bubblers: 0x"); client.print(digitalRead(D6), HEX);
+            client.print(", drip: 0x"); client.print(digitalRead(D5), HEX);
+            client.println(".");
 
 
             client.println("<p>This is an ESP8266 running a relay board as a controller for irrigation valves. Code written by Matt Ingenthron based on various bits on the web.</p>");
