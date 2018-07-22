@@ -1,0 +1,7 @@
+/* 
+   wifi access credentials, edit to your network 
+   then rename to not have the _example
+*/
+
+const char* SSID     = "ingenthron";
+const char* PASSWORD = "getyourownpassword"; /* not really my password */
