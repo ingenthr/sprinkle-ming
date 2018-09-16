@@ -30,6 +30,10 @@ void setup() {
   pinMode(D6, OUTPUT);  // red - bubblers
   pinMode(D5, OUTPUT);  // green - drip manifold
 
+  digitalWrite(D7, HIGH);   // turn everything off
+  digitalWrite(D6, HIGH);
+  digitalWrite(D5, HIGH);
+
 
   // Connect to Wi-Fi network with SSID and password
   Serial.print("Connecting to ");
@@ -45,9 +49,7 @@ void setup() {
   Serial.println(WiFi.localIP());
   server.begin();
 
-  digitalWrite(D7, LOW);   // turn everything off
-  digitalWrite(D6, LOW);
-  digitalWrite(D5, LOW);
+
   
 }
 
@@ -88,18 +90,18 @@ void loop() {
             // turns the GPIOs on and off
             if (req_header.indexOf("POST /valves/grass") >= 0) {
               Serial.println("Turning grass on…");
-              digitalWrite(D7, HIGH);
+              digitalWrite(D7, LOW);
             } else if (req_header.indexOf("POST /valves/bubbler") >= 0) {
               Serial.println("Turning bubbler on…");
-              digitalWrite(D6, HIGH);
+              digitalWrite(D6, LOW);
             } else if (req_header.indexOf("POST /valves/drip") >= 0) {
               Serial.println("Turning drip on…");
-              digitalWrite(D5, HIGH);
+              digitalWrite(D5, LOW);
             } else if (req_header.indexOf("POST /valves") >= 0) {  // TODO, check for off/on, restrict to really the right thing
               Serial.println("Turning all valves off…");
-              digitalWrite(D5, LOW);
-              digitalWrite(D6, LOW);
-              digitalWrite(D7, LOW);
+              digitalWrite(D5, HIGH);
+              digitalWrite(D6, HIGH);
+              digitalWrite(D7, HIGH);
             }
 
             // Display the HTML web page
